@@ -1,6 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/zsh
-# Termux FLAC Converter Pro v12.2
-# (Optimized specifically for Samsung Galaxy A14 5G — Android 15)
+
+# Termux FLAC Converter Pro v12.2 — (Optimized specifically for Samsung Galaxy A14 5G — Android 15)
+
 # ----- Shell & env -------------------------------------------------------------
 setopt ERR_EXIT NO_UNSET PIPE_FAIL 2>/dev/null || true
 setopt EXTENDED_GLOB NULL_GLOB RC_EXPAND_PARAM
