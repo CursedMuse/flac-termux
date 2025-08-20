@@ -1,44 +1,32 @@
-#!/data/data/com.termux/files/usr/bin/zsh
+# …change: readonly VERSION="12.3-termux" → readonly 
+# VERSION="12.3-termux"#!/data/data/com.termux/files/usr/bin/zsh
 
-# Termux FLAC Converter Pro v12.2 — (Optimized specifically for Samsung Galaxy A14 5G — Android 15)
+# Termux FLAC Converter Pro v12.2 — (Optimized specifically for Samsung Galaxy A14 5G — Android 
+# 15) sanity check ----- Shell & env 
+# -------------------------------------------------------------
+zsh -n Flac.zsh || { echo "Syntax error"; exit 1; }setopt ERR_EXIT NO_UNSET PIPE_FAIL 2>/dev/null 
+|| true setopt EXTENDED_GLOB NULL_GLOB RC_EXPAND_PARAM zmodload -F zsh/zutil b:zparseopts 
+2>/dev/null || true
 
-# ----- Shell & env -------------------------------------------------------------
-setopt ERR_EXIT NO_UNSET PIPE_FAIL 2>/dev/null || true
-setopt EXTENDED_GLOB NULL_GLOB RC_EXPAND_PARAM
-zmodload -F zsh/zutil b:zparseopts 2>/dev/null || true
-
-typeset -A C
-C[RESET]=$'\033[0m'; C[RED]=$'\033[0;31m'; C[GREEN]=$'\033[0;32m'
-C[YELLOW]=$'\033[1;33m'; C[CYAN]=$'\033[0;36m'; C[BOLD]=$'\033[1m'
-C[BLUE]=$'\033[0;34m'; C[MAG]=$'\033[0;35m'
-
-export TMPDIR="/data/data/com.termux/files/usr/tmp"
-export PATH="/data/data/com.termux/files/usr/bin:$PATH"
-export LC_ALL=C
-
-readonly VERSION="12.2-termux"
-readonly START_PWD="${PWD}"
-readonly LOG_DIR="${HOME}/.flac_converter_logs"
-readonly DATE_STAMP=$(date +%Y%m%d_%H%M%S)
-readonly LOG_FILE="${LOG_DIR}/flac_conversion_${DATE_STAMP}.log"
-mkdir -p "$LOG_DIR"
-
-log(){ local L=$1; shift
-  case $L in
-    ERROR) print -r -- "${C[RED]}[ERROR]${C[RESET]} $*";;
-    WARN)  print -r -- "${C[YELLOW]}[WARN] ${C[RESET]} $*";;
-    INFO)  print -r -- "${C[GREEN]}[INFO] ${C[RESET]} $*";;
-    STEP)  print -r -- "${C[BLUE]}[STEP] ${C[RESET]} $*";;
-    OK)    print -r -- "${C[GREEN]}[OK]   ${C[RESET]} $*";;
-    DEBUG) [[ ${VERBOSE:-0} -eq 1 ]] && print -r -- "${C[CYAN]}[DEBUG]${C[RESET]} $*";;
-    *)     print -r -- "$L $*";;
-  esac
-}
-_logfile(){ local ts=$(date '+%Y-%m-%d %H:%M:%S'); echo "[$ts] [$1] $2" >> "$LOG_FILE"; }
-
-SP_CHARS='⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏'
-spinner_run(){ emulate -L zsh; local label="$1"; shift
-  print -n -- "${C[BLUE]}[WORK]${C[RESET]} $label "
+typeset -A C C[RESET]=$'\033[0m'; C[RED]=$'\033[0;31m'; C[GREEN]=$'\033[0;32m' 
+C[YELLOW]=$'\033[1;33m'; C[CYAN]=$'\033[0;36m'; C[BOLD]=$'\033[1m' C[BLUE]=$'\033[0;34m'; 
+C[MAG]=$'\033[0;35m' git add Flac.zsh export TMPDIR="/data/data/com.termux/files/usr/tmp" export 
+PATH="/data/data/com.termux/files/usr/bin:$PATH" export LC_ALL=C git commit -m "v12.3: tune 
+thresholds & guards" readonly VERSION="12.2-termux" readonly START_PWD="${PWD}" readonly 
+LOG_DIR="${HOME}/.flac_converter_logs" readonly DATE_STAMP=$(date +%Y%m%d_%H%M%S) readonly 
+LOG_FILE="${LOG_DIR}/flac_conversion_${DATE_STAMP}.log" mkdir -p "$LOG_DIR" git push -u origin 
+fast-streak-tuning log(){ local L=$1; shift
+  case $L in ERROR) print -r -- "${C[RED]}[ERROR]${C[RESET]} $*";; WARN) print -r -- 
+    "${C[YELLOW]}[WARN] ${C[RESET]} $*";; INFO) print -r -- "${C[GREEN]}[INFO] ${C[RESET]} $*";; 
+    STEP) print -r -- "${C[BLUE]}[STEP] ${C[RESET]} $*";; OK) print -r -- "${C[GREEN]}[OK] 
+    ${C[RESET]} $*";; DEBUG) [[ ${VERBOSE:-0} -eq 1 ]] && print -r -- 
+    "${C[CYAN]}[DEBUG]${C[RESET]} $*";; *) print -r -- "$L $*";;
+# now open the PR esac
+gh pr create -B main -H fast-streak-tuning \} _logfile(){ local ts=$(date '+%Y-%m-%d %H:%M:%S'); 
+echo "[$ts] [$1] $2" >> "$LOG_FILE"; }
+  --title "Tune streak thresholds & guards" \ SP_CHARS='⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏' spinner_run(){ emulate -L 
+zsh; local label="$1"; shift
+  --body "Adjust short/long streak to 10/10, strict prompts, guards for arrays."  print -n -- "${C[BLUE]}[WORK]${C[RESET]} $label "
   "$@" & local pid=$!
   local i=1 n=${#SP_CHARS}
   while kill -0 $pid 2>/dev/null; do
